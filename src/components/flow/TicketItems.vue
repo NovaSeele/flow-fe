@@ -45,25 +45,25 @@
             <div class="menu-item" @click="handleEdit">Edit</div>
             <div class="menu-item" @click="handleDelete">Delete</div>
           </div>
-          <div>
+          <Teleport to="body">
             <transition name="fade">
               <TicketForm
                 v-if="showForm"
                 @close="showForm = false"
-                :title="'Edit a ticket'"
+                :title="'Edit Ticket for ' + currentSprint.sprint_title"
                 :projectOptions="['Project A', 'Project B']"
                 :statusOptions="['Open', 'In Progress', 'Resolved']"
                 :assigneOptions="['John Doe', 'Jane Smith']"
-                :sprintOptions="['Sprint 1', 'Sprint 2']"
+                :sprintOptions="sprints.map((s) => s.sprint_title)"
                 :reporterOptions="['Admin', 'Manager']"
                 :defaultProject="'Project A'"
                 :defaultStatus="'Open'"
                 :defaultAssignee="'John Doe'"
-                :defaultSprint="'Sprint 1'"
+                :defaultSprint="currentSprint.sprint_title"
                 :defaultReporter="'Admin'"
               />
             </transition>
-          </div>
+          </Teleport>
         </div>
       </div>
     </div>
@@ -144,6 +144,10 @@ defineProps({
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.fade {
+  z-index: 30000;
 }
 
 .ticket-card {

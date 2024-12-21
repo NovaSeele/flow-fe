@@ -2,13 +2,15 @@
   <div class="sprint-container">
     <header class="sprint-header">
       <div class="sprint-info">
-        <button class="select-all-btn" tabindex="0">Select all</button>
+        <!-- <button class="select-all-btn" tabindex="0">Select all</button> -->
         <div class="sprint-title">
-          <h2 class="sprint-name">Sprint 1</h2>
+          <h2 class="sprint-name">{{ sprint_title }}</h2>
         </div>
         <div class="sprint-meta">
-          <span class="sprint-date">Date: 9/11/2024 - 9/11/2025</span>
-          <span class="ticket-count">(5 tickets)</span>
+          <span class="sprint-date">{{ sprint_date }}</span>
+          <span class="ticket-count"
+            >{{ sprint_number_of_tickets }} tickets</span
+          >
         </div>
       </div>
       <div class="sprint-actions">
@@ -60,6 +62,21 @@
 <script setup>
 import { ref } from "vue";
 import TicketItems from "./TicketItems.vue";
+
+defineProps({
+  sprint_title: {
+    type: String,
+    required: true,
+  },
+  sprint_date: {
+    type: String,
+    required: true,
+  },
+  sprint_number_of_tickets: {
+    type: Number,
+    required: true,
+  },
+});
 
 const isMenuOpen = ref(false);
 const toggleMenu = () => {
@@ -114,7 +131,7 @@ const tickets = ref([
     assignedUserAvatar: "https://i.postimg.cc/FK1MwP89/seele-BA.jpg",
     assignedUserName: "NovaSeele",
   },
-  // Add more tickets as needed
+  // Sample data
 ]);
 </script>
 
