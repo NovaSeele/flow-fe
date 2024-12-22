@@ -1,14 +1,26 @@
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
+import { RouterLink, RouterView, useRoute } from "vue-router";
 import Header from "./components/UI/Header.vue";
 import SideBar from "./components/UI/SideBar.vue";
+import { ref, watch } from "vue";
+
+const route = useRoute();
+const isLoginPage = ref(false);
+
+watch(() => route.path, () => {
+  if(route.path === "/login" || route.path === "/signup") {
+    isLoginPage.value = true;
+  } else {
+    isLoginPage.value = false;
+  }
+});
+
 </script>
 
 <template>
   <div class="app">
-    <Header />
+    <Header v-if="!isLoginPage" />
     <div class="app-body">
-      <SideBar />
       <main>
         <RouterView />
       </main>

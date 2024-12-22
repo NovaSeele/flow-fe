@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown">
+  <div class="dropdown" v-click-outside="closeDropdown">
     <button class="dropdown-button" :style="{ backgroundColor: selectedColor }" @click="toggleDropdown">
       {{ selectedItem || 'Select an option' }}
     </button>
@@ -32,7 +32,7 @@ const props = defineProps({
   itemColors: {
     type: Array,
     default: () => [], // Array of colors for each item
-  },
+  }
 });
 
 const emit = defineEmits();
@@ -48,6 +48,12 @@ onMounted(() => {
     selectedColor.value = props.itemColors[defaultIndex] || '#fff';
   }
 });
+
+const closeDropdown = () => {
+  console.log('Closing dropdown');
+  
+  isOpen.value = false;
+};
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;

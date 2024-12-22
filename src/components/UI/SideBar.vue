@@ -2,60 +2,51 @@
 import { ref } from "vue";
 
 const isShow = ref(true);
-const activeSection = ref("");
-
-const handleShow = () => {
-  isShow.value = !isShow.value;
-};
+const activeSection = ref("Current");
+const props = defineProps(['projectName']);
+const emitter = defineEmits(['currentTab']);
 
 const handleClick = (section) => {
-  activeSection.value = section; // Store the clicked section name
-  //   console.log(`${section} clicked`);
+  activeSection.value = section; 
+  emitter('currentTab', section);
 };
 </script>
 
 <template>
   <div class="sidebar-container">
-    <div
-      class="toggle-button"
-      :class="{ rotated: !isShow }"
-      @click="handleShow"
-    >
-      <img src="./UI_icons/toggle.svg" alt="Toggle Icon" />
-    </div>
     <div :class="['side-menu', { hidden: !isShow }]">
       <div class="div">
-        <router-link to="/board">
+        <div>
           <div
-            class="board"
+            class="current"
             :class="{
-              hovered: activeSection !== 'Board',
-              selected: activeSection === 'Board',
+              hovered: activeSection !== 'Current',
+              selected: activeSection === 'Current',
             }"
-            @click="handleClick('Board')"
+            @click="handleClick('Current')"
           >
             <img src="./UI_icons/book.svg" alt="Book Icon" />
-            <div class="text-wrapper">Board</div>
+            <div class="text-wrapper">Current</div>
           </div>
-        </router-link>
+        </div>
 
-        <router-link to="/sprint">
+        <div>
           <div
-            class="backlog"
+            class="sprints"
             :class="{
-              hovered: activeSection !== 'Backlog',
-              selected: activeSection === 'Backlog',
+              hovered: activeSection !== 'Sprints',
+              selected: activeSection === 'Sprints',
             }"
-            @click="handleClick('Backlog')"
+            @click="handleClick('Sprints')"
           >
             <div class="div-2">
-              <img src="./UI_icons/backlog.svg" alt="Backlog Icon" />
-              <div class="text-wrapper-2">Backlog</div>
+              <img src="./UI_icons/sprints.svg" alt="Sprints Icon" />
+              <div class="text-wrapper-2">Sprints</div>
             </div>
           </div>
-        </router-link>
+        </div>
 
-        <router-link to="/">
+        <div>
           <div
             class="div-wrapper"
             :class="{
@@ -69,13 +60,13 @@ const handleClick = (section) => {
               <div class="text-wrapper-3">Issues</div>
             </div>
           </div>
-        </router-link>
+        </div>
       </div>
 
       <div class="div-3">
-        <router-link to="/">
+        <div>
           <div
-            class="board"
+            class="current"
             :class="{
               hovered: activeSection !== 'Members',
               selected: activeSection === 'Members',
@@ -85,8 +76,8 @@ const handleClick = (section) => {
             <img src="./UI_icons/member.svg" alt="Member Icon" />
             <div class="text-wrapper">Members</div>
           </div>
-        </router-link>
-        <router-link to="/">
+        </div>
+        <div>
           <div
             class="div-wrapper"
             :class="{
@@ -100,8 +91,8 @@ const handleClick = (section) => {
               <div class="text-wrapper">Role &amp; Access</div>
             </div>
           </div>
-        </router-link>
-        <router-link to="/">
+        </div>
+        <div>
           <div
             class="div-wrapper"
             :class="{
@@ -115,21 +106,19 @@ const handleClick = (section) => {
               <div class="text-wrapper">Project Settings</div>
             </div>
           </div>
-        </router-link>
+        </div>
       </div>
-
       <div class="overview">
         <div class="div-2">
           <img src="./UI_icons/header.svg" alt="Setting Icon" />
           <div class="frame">
             <div class="overlap-group">
-              <div class="text-wrapper-4">Project Name</div>
-              <div class="text-wrapper-5">Workspace name</div>
+              <div class="text-wrapper-4">{{ projectName }}</div>
+              <div class="text-wrapper-5">Project details</div>
             </div>
           </div>
         </div>
       </div>
-
       <div class="planning">PLANNING</div>
       <div class="settings">SETTINGS</div>
     </div>
@@ -142,7 +131,7 @@ a {
   color: inherit;
 }
 
-.router-link-active, .router-link-exact-active {
+.div-active, .div-exact-active {
   text-decoration: none;
   color: inherit;
 }
@@ -185,8 +174,8 @@ a {
   transition: width 0.3s;
 }
 
-.side-menu .board,
-.side-menu .backlog,
+.side-menu .current,
+.side-menu .sprints,
 .side-menu .div-wrapper {
   display: flex;
   align-items: center;
@@ -197,8 +186,8 @@ a {
   transition: background-color 0.3s ease;
 }
 
-.side-menu .board img,
-.side-menu .backlog img,
+.side-menu .current img,
+.side-menu .sprints img,
 .side-menu .div-wrapper img {
   width: 24px;
   height: 24px;
@@ -289,7 +278,7 @@ a {
   top: 132px;
 }
 
-.side-menu .board {
+.side-menu .current {
   align-items: center;
   border-radius: 10px;
   display: inline-flex;
@@ -319,18 +308,6 @@ a {
   white-space: nowrap;
   width: 112px;
 }
-
-/* .side-menu .backlog {
-  align-items: flex-start;
-  background-color: #f5f5f7;
-  border-radius: 10px;
-  display: inline-flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px 20px;
-  position: relative;
-} */
 
 .side-menu .div-2 {
   align-items: flex-start;
@@ -389,18 +366,6 @@ a {
   left: 18px;
   position: absolute;
   top: 370px;
-}
-
-.side-menu .overview {
-  align-items: flex-start;
-  border-radius: 10px;
-  display: inline-flex;
-  flex-direction: column;
-  gap: 10px;
-  left: 18px;
-  padding: 10px 20px;
-  position: absolute;
-  top: 21px;
 }
 
 .side-menu .image {

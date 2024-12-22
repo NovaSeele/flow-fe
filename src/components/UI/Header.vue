@@ -4,68 +4,39 @@
     <p class="header-title"><span class="header-title-highlight">Fl</span>ow</p>
     <ul class="nav-list">
       <li class="nav-item">
-        <span>Projects</span>
+        <RouterLink style="text-decoration: none; color: inherit;" to="/projects">
+          My Projects
+        </RouterLink>
       </li>
       <li class="nav-item">
-        <span>My Works</span>
+        <RouterLink style="text-decoration: none; color: inherit;" to="/profile">
+          My Profile
+        </RouterLink>
       </li>
     </ul>
-    <div>
-      <Dropdown
-        class="header_dropdown"
-        :content="options"
-        @select="handleSelect"
-      />
-    </div>
-    <CustomButton
-      text="Create"
-      buttonColor="#546FFF"
-      textColor="#ffffff"
-      @click="showForm = true"
-    />
     <div class="header-icons">
-      <CustomButton text="Log out" buttonColor="#546FFF" textColor="#ffffff" />
+      <CustomButton @click="logout" text="Log out" buttonColor="#546FFF" textColor="#ffffff" />
       <img
         src="@/images/seele_BA.png"
         alt="Profile Avatar"
         class="profile-avatar"
       />
     </div>
-    <!-- Transiton Components -->
-    <div>
-      <transition name="fade">
-        <TicketForm
-          v-if="showForm"
-          @close="showForm = false"
-          :title="'Create a ticket'"
-          :projectOptions="['Project A', 'Project B']"
-          :statusOptions="['Open', 'In Progress', 'Resolved']"
-          :assigneOptions="['John Doe', 'Jane Smith']"
-          :sprintOptions="['Sprint 1', 'Sprint 2']"
-          :reporterOptions="['Admin', 'Manager']"
-          :defaultProject="'Project A'"
-          :defaultStatus="'Open'"
-          :defaultAssignee="'John Doe'"
-          :defaultSprint="'Sprint 1'"
-          :defaultReporter="'Admin'"
-        />
-      </transition>
-    </div>
   </header>
 </template>
 
 <script setup>
 import CustomButton from "@/components/props/Button.vue";
-import Dropdown from "@/components/props/Dropdown.vue";
-import TicketForm from "@/components/flow/TicketForm.vue";
-import { ref } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
-const showForm = ref(false);
-const options = ["Option 1", "Option 2", "Option 3"];
+const router = useRouter();
 
-const handleSelect = (selected) => {
-  console.log("Selected:", selected);
+const logout = () => {
+  useAuthStore().clearToken();
+  router.push("/login");
 };
+
 </script>
 
 <style scoped></style>
